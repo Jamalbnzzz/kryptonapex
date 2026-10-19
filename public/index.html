@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRYPTON APEX — Institutional Solana Execution Terminal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- مكتبة سولانا للتحويلات الفورية من المتصفح -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: '#05070B',
+                        panel: '#0B0F19',
+                        borderSubtle: '#1E293B',
+                        emeraldLux: '#10B981',
+                        cyanLux: '#06B6D4',
+                        goldLux: '#F59E0B',
+                        crimsonLux: '#F43F5E'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-slate-100 min-h-screen font-sans antialiased flex flex-col selection:bg-emeraldLux selection:text-black">
+
+    <!-- Top Institutional Telemetry Ribbon -->
+    <div class="w-full bg-[#030508] border-b border-white/[0.06] px-5 py-1.5 flex items-center justify-between text-[11px] font-mono text-slate-400">
+        <div class="flex items-center gap-5">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emeraldLux animate-ping"></span>
+                <span class="text-slate-300 font-semibold">HELIUS ULTRA-RPC</span>
+                <span id="rpcLatencyBadge" class="text-emeraldLux font-bold px-1.5 py-0.5 bg-emerald-500/10 rounded">12ms</span>
+            </div>
+            <div class="hidden sm:flex items-center gap-2 border-l border-white/[0.08] pl-5">
+                <span class="text-slate-500">JITO BLOCK ENGINE:</span>
+                <span class="text-cyanLux font-semibold">FRANKFURT-MAINNET</span>
+            </div>
+            <div class="hidden md:flex items-center gap-2 border-l border-white/[0.08] pl-5">
+                <span class="text-slate-500">LATENCY SHIELD:</span>
+                <span class="text-emeraldLux font-semibold">SUITE-X ULTRA-FAST DISPATCH</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1.5">
+                <span class="text-slate-500">SOL/USD</span>
+                <span class="text-emeraldLux font-bold">$194.80</span>
+            </div>
+            <span class="text-white/20">|</span>
+            <div class="flex items-center gap-1.5">
+                <span class="text-slate-500">GAS</span>
+                <span class="text-slate-300">0.000005 SOL</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Clean Header Bar -->
+    <header class="w-full max-w-[1680px] mx-auto px-5 py-3 flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 border-b border-white/[0.06] bg-[#060911]/90 backdrop-blur-xl">
+        
+        <!-- KRYPTON APEX Official Frameless Nexus Orbit Logo (Header) -->
+        <div class="flex items-center gap-3.5 shrink-0">
+            <svg class="w-9 h-9 drop-shadow-[0_0_12px_rgba(16,185,129,0.45)] shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="nxEm" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#6EE7B7"/>
+                        <stop offset="50%" stop-color="#10B981"/>
+                        <stop offset="100%" stop-color="#047857"/>
+                    </linearGradient>
+                    <linearGradient id="nxCy" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#67E8F9"/>
+                        <stop offset="50%" stop-color="#06B6D4"/>
+                        <stop offset="100%" stop-color="#0369A1"/>
+                    </linearGradient>
+                </defs>
+                <path d="M50 8 L30 50 L50 92 Z" fill="url(#nxEm)"/>
+                <path d="M50 8 L70 50 L50 92 Z" fill="url(#nxCy)"/>
+                <path d="M10 62 C20 78 80 58 90 36 C82 22 68 24 68 24 C78 30 74 46 46 56 C22 64 14 54 22 44 C12 48 6 56 10 62 Z" fill="#ECFDF5"/>
+            </svg>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-base font-extrabold tracking-tight text-white">KRYPTON <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">APEX</span></h1>
+                    <span class="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">TERMINAL v5.0</span>
+                </div>
+                <p class="text-[10px] text-slate-400">Zero-Latency Autonomous Liquidity Engine</p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 shrink-0">
+            <div class="flex items-center bg-[#080C14] border border-white/[0.08] rounded-xl px-3 py-1.5 gap-3">
+                <div class="flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"/>
+                    </svg>
+                    <div>
+                        <span class="text-[8px] text-slate-500 uppercase block leading-none">Vault Address</span>
+                        <span id="displayWalletPubkey" class="text-[11px] font-mono font-bold text-slate-200">Not Connected</span>
+                    </div>
+                </div>
+
+                <div class="h-5 w-[1px] bg-white/[0.08]"></div>
+
+                <div class="flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-emeraldLux" viewBox="0 0 397 311" fill="currentColor">
+                        <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7zM64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8zM332.4 120.9c-2.4-2.4-5.7-3.8-9.2-3.8H5.8c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z"/>
+                    </svg>
+                    <div>
+                        <span class="text-[8px] text-slate-500 uppercase block leading-none">SOL Liquidity</span>
+                        <span id="displaySolBalance" class="text-[11px] font-mono font-bold text-emeraldLux">0.0000 SOL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="walletStatusBadge" class="px-3 py-2 bg-[#080C14] border border-white/[0.08] text-slate-400 text-[10px] font-mono rounded-xl font-bold uppercase tracking-wider">
+                DISCONNECTED
+            </div>
+
+            <button id="btnConnectPhantom" class="px-4 py-2 bg-gradient-to-r from-[#5345B8] to-[#7C66DC] hover:from-[#6252D4] hover:to-[#8E78F0] border border-[#AB9FF2]/40 text-white text-xs font-bold rounded-xl shadow-lg shadow-[#5345B8]/30 transition-all flex items-center gap-2 shrink-0">
+                <svg class="w-4 h-4" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFFFFF" d="M110.58 64.91H99.14C99.14 41.77 80.17 23 56.77 23 33.66 23 14.87 41.31 14.41 64.06 13.94 87.58 35.85 108 59.89 108h3.61c20.83 0 50.34-16.44 52.39-38.07.26-2.73-2.56-5.02-5.31-5.02z"/>
+                    <ellipse cx="67" cy="57" rx="5.5" ry="7.5" fill="#5345B8"/>
+                    <ellipse cx="84" cy="57" rx="5.5" ry="7.5" fill="#5345B8"/>
+                </svg>
+                <span id="phantomBtnText">Connect Phantom</span>
+            </button>
+        </div>
+
+    </header>
+
+    <!-- Main Layout Grid -->
+    <main class="w-full max-w-[1680px] mx-auto p-5 grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+
+        <!-- Left Column: Strategy & Parameters -->
+        <div class="lg:col-span-4 space-y-5 flex flex-col">
+
+            <div class="panel bg-panel border border-borderSubtle rounded-2xl p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3.5">
+                    <h2 class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emeraldLux" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+                        </svg>
+                        Algorithmic Strategy Mode
+                    </h2>
+                    <span id="displayEngineStatus" class="text-[9px] font-mono font-bold text-emeraldLux bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emeraldLux animate-pulse"></span> ACTIVE DAEMON
+                    </span>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="mode-card active border border-white/[0.08] bg-obsidian/50 rounded-xl p-3 cursor-pointer" data-mode="MODE_1_AI_SNIPER">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emeraldLux">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-white">AI Liquidity Sniper</div>
+                                    <div class="text-[10px] text-slate-400">Pump.fun & Raydium $46K MC breakout entry</div>
+                                </div>
+                            </div>
+                            <span class="mode-dot w-2 h-2 rounded-full bg-emeraldLux shadow-[0_0_8px_#10B981]"></span>
+                        </div>
+                    </div>
+
+                    <div class="mode-card border border-white/[0.08] bg-obsidian/50 rounded-xl p-3 cursor-pointer hover:border-white/20" data-mode="MODE_2_COPY_TRADER">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyanLux">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-white">Zero-Block Copy Trader</div>
+                                    <div class="text-[10px] text-slate-400">Mirror target smart money wallet in same block</div>
+                                </div>
+                            </div>
+                            <span class="mode-dot w-2 h-2 rounded-full bg-slate-700"></span>
+                        </div>
+                    </div>
+
+                    <div class="mode-card border border-white/[0.08] bg-obsidian/50 rounded-xl p-3 cursor-pointer hover:border-white/20" data-mode="MODE_3_WHALE_TRACKER">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-white">Whale Accumulation Radar</div>
+                                    <div class="text-[10px] text-slate-400">Track fresh funders with >100 SOL inflows</div>
+                                </div>
+                            </div>
+                            <span class="mode-dot w-2 h-2 rounded-full bg-slate-700"></span>
+                        </div>
+                    </div>
+
+                    <div class="mode-card border border-white/[0.08] bg-obsidian/50 rounded-xl p-3 cursor-pointer hover:border-white/20" data-mode="MODE_4_SMART_EXIT">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-goldLux">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-white">Graduation Wall & Dump Shield</div>
+                                    <div class="text-[10px] text-slate-400">Front-run dev dumps & $62K Raydium migration</div>
+                                </div>
+                            </div>
+                            <span class="mode-dot w-2 h-2 rounded-full bg-slate-700"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="targetTraderGroup" class="mt-3.5 pt-3 border-t border-white/[0.06]" style="display: none;">
+                    <label class="text-[10px] text-slate-400 font-semibold uppercase block mb-1.5">Target Smart-Money Address</label>
+                    <input type="text" id="inputTargetTrader" placeholder="Enter Solana wallet pubkey..." class="lux-input w-full rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none">
+                </div>
+            </div>
+
+            <div class="panel bg-panel border border-borderSubtle rounded-2xl p-4 shadow-xl space-y-3.5 flex-1 flex flex-col justify-between">
+                <div class="space-y-3.5">
+                    <h2 class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4 text-cyanLux" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"/>
+                        </svg>
+                        Order Sizing & MEV Parameters
+                    </h2>
+
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1.5">
+                            <span class="text-slate-400 uppercase font-semibold">Entry Allocation (SOL)</span>
+                            <span class="text-emeraldLux font-mono font-bold">PRIORITY FILL</span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2 mb-2">
+                            <button class="size-pill py-1.5 bg-obsidian border border-white/[0.08] rounded-lg text-xs font-mono font-bold hover:border-cyanLux transition-all text-slate-300" data-amount="0.01">0.01</button>
+                            <button class="size-pill active py-1.5 bg-emerald-950/60 border border-emerald-500 text-emeraldLux rounded-lg text-xs font-mono font-bold" data-amount="0.05">0.05</button>
+                            <button class="size-pill py-1.5 bg-obsidian border border-white/[0.08] rounded-lg text-xs font-mono font-bold hover:border-cyanLux transition-all text-slate-300" data-amount="0.1">0.10</button>
+                            <button class="size-pill py-1.5 bg-obsidian border border-white/[0.08] rounded-lg text-xs font-mono font-bold hover:border-cyanLux transition-all text-slate-300" data-amount="0.5">0.50</button>
+                        </div>
+                        <input type="number" id="inputTradeAmount" value="0.05" step="0.01" class="lux-input w-full rounded-xl px-3.5 py-2 text-xs font-mono font-bold text-white focus:outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-semibold block mb-1">Max Slippage (%)</label>
+                            <input type="number" id="inputSlippage" value="15" class="lux-input w-full rounded-xl px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-semibold block mb-1">Jito MEV Tip (SOL)</label>
+                            <input type="number" id="inputJitoTip" value="0.001" step="0.0005" class="lux-input w-full rounded-xl px-3 py-2 text-xs font-mono font-bold text-emeraldLux focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-semibold block mb-1">Auto Take-Profit (%)</label>
+                            <input type="number" id="inputTakeProfit" value="100" class="lux-input w-full rounded-xl px-3 py-2 text-xs font-mono font-bold text-emeraldLux focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-semibold block mb-1">Auto Stop-Loss (%)</label>
+                            <input type="number" id="inputStopLoss" value="30" class="lux-input w-full rounded-xl px-3 py-2 text-xs font-mono font-bold text-crimsonLux focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-white/[0.06]">
+                        <div>
+                            <div class="text-xs font-bold text-slate-200">Anti-Sandwich MEV Shield</div>
+                            <div class="text-[10px] text-slate-400">Private Jito block bundle routing</div>
+                        </div>
+                        <input type="checkbox" id="toggleMevShield" checked class="w-4 h-4 accent-emerald-500 rounded cursor-pointer">
+                    </div>
+                </div>
+
+                <button id="btnApplySettings" class="w-full py-3 mt-3 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-wider flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                    </svg>
+                    Synchronize Execution Parameters
+                </button>
+            </div>
+
+            <div class="hidden" aria-hidden="true">
+                <input type="checkbox" id="toggleAutoSweep" checked>
+                <div id="sweepSettingsGroup">
+                    <input type="text" id="inputMainWallet" value="">
+                    <input type="number" id="inputReserveSol" value="0">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Chart + Radar + Logs -->
+        <div class="lg:col-span-8 space-y-5 flex flex-col">
+
+            <div class="panel bg-panel border border-borderSubtle rounded-2xl p-4 shadow-xl flex flex-col h-[410px]">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emeraldLux shadow-[0_0_8px_#10B981]"></span>
+                            <h3 id="chartTitleLabel" class="text-xs font-bold text-white uppercase tracking-wider">LIVE MARKET TELEMETRY (SOL / USDT)</h3>
+                        </div>
+                        <div class="flex items-center gap-1 bg-obsidian border border-white/[0.07] rounded-lg p-0.5 text-[10px] font-mono">
+                            <button class="pair-btn px-2 py-0.5 rounded bg-emerald-500/20 text-emeraldLux font-bold" data-symbol="BINANCE:SOLUSDT" data-label="SOL / USDT">SOL</button>
+                            <button class="pair-btn px-2 py-0.5 rounded text-slate-400 hover:text-white" data-symbol="BINANCE:RAYUSDT" data-label="RAY / USDT">RAY</button>
+                            <button class="pair-btn px-2 py-0.5 rounded text-slate-400 hover:text-white" data-symbol="BINANCE:JUPUSDT" data-label="JUP / USDT">JUP</button>
+                            <button class="pair-btn px-2 py-0.5 rounded text-slate-400 hover:text-white" data-symbol="BINANCE:BONKUSDT" data-label="BONK / USDT">BONK</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 text-[10px] font-mono text-emeraldLux bg-emerald-950/50 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+                        </svg>
+                        <span>SECURE SECP256K1 HARDWARE KERNEL</span>
+                    </div>
+                </div>
+
+                <div class="w-full flex-1 rounded-xl overflow-hidden border border-white/[0.07] bg-[#05070B]">
+                    <iframe
+                        id="tvChartIframe"
+                        src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_76d87&symbol=BINANCE%3ASOLUSDT&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=0b0f19&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&showpopupbutton=0&studies_overrides=%7B%7D&overrides=%7B%22paneProperties.background%22%3A%22%2305070B%22%2C%22paneProperties.vertGridProperties.color%22%3A%22%230F172A%22%2C%22paneProperties.horzGridProperties.color%22%3A%22%230F172A%22%7D&enabled_features=%5B%5D&disabled_features=%5B%22header_Clean_chart%22%5D&locale=en"
+                        style="width: 100%; height: 100%; border: 0;"
+                        allowtransparency="true"
+                        scrolling="no"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+                <div class="lg:col-span-5 panel bg-panel border border-borderSubtle rounded-2xl p-4 shadow-xl flex flex-col">
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-white/[0.06]">
+                        <span class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                            <svg class="w-4 h-4 text-goldLux" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"/>
+                            </svg>
+                            Pump.fun / Raydium Scanner
+                        </span>
+                        <span class="text-[9px] font-mono font-bold text-emeraldLux bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded">MEMPOOL LIVE</span>
+                    </div>
+                    <div id="radarContainer" class="space-y-2 text-[11px] font-mono overflow-y-auto max-h-[225px] pr-1"></div>
+                </div>
+
+                <div class="lg:col-span-7 panel bg-panel border border-borderSubtle rounded-2xl p-4 shadow-xl flex flex-col">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/[0.06]">
+                        <span class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                            <svg class="w-4 h-4 text-cyanLux" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/>
+                            </svg>
+                            Autonomous Execution & Vault Telemetry
+                        </span>
+                        <button id="btnClearConsole" class="text-[10px] font-mono text-slate-400 hover:text-white uppercase px-2.5 py-0.5 rounded bg-white/[0.05] hover:bg-white/[0.1] transition-all">Clear</button>
+                    </div>
+                    <div id="consoleLogs" class="bg-[#04060A] border border-white/[0.06] rounded-xl p-3.5 flex-1 overflow-y-auto text-[11px] font-mono space-y-1.5 max-h-[225px]">
+                        <div class="text-slate-400">[SYSTEM] Institutional enclave initialized on local host.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Professional Solscan-Style Institutional Footer -->
+    <footer class="w-full bg-[#030508] border-t border-white/[0.08] text-slate-400 font-sans mt-auto py-10 px-6">
+        <div class="max-w-[1680px] mx-auto">
+            
+            <!-- Top Footer Bar: Logo + Official Frameless Transparent Logos + Back to Top -->
+            <div class="flex flex-wrap items-center justify-between gap-6 pb-8 border-b border-white/[0.06]">
+                
+                <!-- Left: Krypton Apex Nexus Orbit Logo (Footer) -->
+                <div class="flex items-center gap-3 shrink-0">
+                    <svg class="w-8 h-8 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="nxFootEm" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6EE7B7"/>
+                                <stop offset="50%" stop-color="#10B981"/>
+                                <stop offset="100%" stop-color="#047857"/>
+                            </linearGradient>
+                            <linearGradient id="nxFootCy" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#67E8F9"/>
+                                <stop offset="50%" stop-color="#06B6D4"/>
+                                <stop offset="100%" stop-color="#0369A1"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M50 8 L30 50 L50 92 Z" fill="url(#nxFootEm)"/>
+                        <path d="M50 8 L70 50 L50 92 Z" fill="url(#nxFootCy)"/>
+                        <path d="M10 62 C20 78 80 58 90 36 C82 22 68 24 68 24 C78 30 74 46 46 56 C22 64 14 54 22 44 C12 48 6 56 10 62 Z" fill="#ECFDF5"/>
+                    </svg>
+                    <span class="text-white font-extrabold tracking-tight text-sm">KRYPTON <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">APEX</span></span>
+                </div>
+
+                <!-- Center: Official Transparent Logos (Bla Itar & 100% Transparent) -->
+                <div class="flex flex-wrap items-center justify-center gap-7">
+                    
+                    <!-- Solana -->
+                    <div class="flex items-center gap-2 opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 397 311'><defs><linearGradient id='s' x1='0%' y1='100%' x2='100%' y2='0%'><stop offset='0%' stop-color='%239945FF'/><stop offset='100%' stop-color='%2314F195'/></linearGradient></defs><path fill='url(%23s)' d='M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7zM64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8zM332.4 120.9c-2.4-2.4-5.7-3.8-9.2-3.8H5.8c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z'/></svg>" alt="Solana" class="w-5 h-5 object-contain">
+                        <span class="text-xs font-mono font-semibold text-slate-200">Solana</span>
+                    </div>
+
+                    <!-- Helius -->
+                    <div class="flex items-center gap-2 opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E84125'><circle cx='20' cy='12' r='1.7'/><circle cx='18.93' cy='16' r='1.7'/><circle cx='16' cy='18.93' r='1.7'/><circle cx='12' cy='20' r='1.7'/><circle cx='8' cy='18.93' r='1.7'/><circle cx='5.07' cy='16' r='1.7'/><circle cx='4' cy='12' r='1.7'/><circle cx='5.07' cy='8' r='1.7'/><circle cx='8' cy='5.07' r='1.7'/><circle cx='12' cy='4' r='1.7'/><circle cx='16' cy='5.07' r='1.7'/><circle cx='18.93' cy='8' r='1.7'/></svg>" alt="Helius" class="w-5 h-5 object-contain">
+                        <span class="text-xs font-mono font-semibold text-slate-200">Helius</span>
+                    </div>
+
+                    <!-- Jito -->
+                    <div class="flex items-center gap-2 opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="https://www.google.com/s2/favicons?domain=jito.network&sz=128" alt="Jito" class="w-5 h-5 object-contain">
+                        <span class="text-xs font-mono font-semibold text-slate-200">Jito</span>
+                    </div>
+
+                    <!-- Pump.fun -->
+                    <div class="flex items-center gap-2 opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="https://www.google.com/s2/favicons?domain=pump.fun&sz=128" alt="Pump.fun" class="w-5 h-5 object-contain">
+                        <span class="text-xs font-mono font-semibold text-slate-200">Pump.fun</span>
+                    </div>
+
+                    <!-- PumpPortal -->
+                    <div class="flex items-center gap-2 opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="https://www.google.com/s2/favicons?domain=pumpportal.fun&sz=128" alt="PumpPortal" class="w-5 h-5 object-contain">
+                        <span class="text-xs font-mono font-semibold text-slate-200">PumpPortal</span>
+                    </div>
+
+                    <!-- Raydium -->
+                    <div class="flex items-center gap-2 opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/8526.png" alt="Raydium" class="w-5 h-5 object-contain">
+                        <span class="text-xs font-mono font-semibold text-slate-200">Raydium</span>
+                    </div>
+
+                    <!-- Alchemy -->
+                    <div class="flex items-center gap-2 opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><linearGradient id='a' x1='0%' y1='100%' x2='100%' y2='0%'><stop offset='0%' stop-color='%23363FF9'/><stop offset='100%' stop-color='%2305C0FA'/></linearGradient></defs><path fill='url(%23a)' d='M12 2.5L2.5 19.5h12.2l-1.9-3.4H8.3L12 9.3l5.7 10.2h3.8L12 2.5z'/></svg>" alt="Alchemy" class="w-5 h-5 object-contain">
+                        <span class="text-xs font-mono font-semibold text-slate-200">Alchemy</span>
+                    </div>
+
+                    <!-- Phantom -->
+                    <div class="flex items-center gap-2 opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><path fill='%23FFFFFF' d='M110.58 64.91H99.14C99.14 41.77 80.17 23 56.77 23 33.66 23 14.87 41.31 14.41 64.06 13.94 87.58 35.85 108 59.89 108h3.61c20.83 0 50.34-16.44 52.39-38.07.26-2.73-2.56-5.02-5.31-5.02z'/><ellipse cx='67' cy='57' rx='5.5' ry='7.5' fill='%23030508'/><ellipse cx='84' cy='57' rx='5.5' ry='7.5' fill='%23030508'/></svg>" alt="Phantom" class="w-5 h-5 object-contain">
+                        <span class="text-xs font-mono font-semibold text-slate-200">Phantom</span>
+                    </div>
+
+                </div>
+                
+                <!-- Right: Back to Top Button -->
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl transition-all border border-white/[0.06] shrink-0">
+                    <span>Back to Top</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+                </button>
+            </div>
+
+            <!-- Links Grid with Clean Correct Routes -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 py-10 border-b border-white/[0.06] text-xs">
+                
+                <div class="space-y-3">
+                    <div class="text-white font-bold flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emeraldLux"></span>
+                        Powered by Krypton Core
+                    </div>
+                    <p class="text-slate-400 leading-relaxed text-[11px]">
+                        Krypton Apex is an institutional-grade Solana execution terminal engineered for low-latency liquidity sniping and automated vault security.
+                    </p>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-white font-bold uppercase tracking-wider text-[11px]">Infrastructure</h3>
+                    <ul class="space-y-2 text-[11px]">
+                        <li><a href="/infrastructure" class="hover:text-emeraldLux transition-colors">RPC Nodes API</a></li>
+                        <li><a href="/infrastructure" class="hover:text-emeraldLux transition-colors">Jito Bundle Relay</a></li>
+                        <li><a href="/infrastructure" class="hover:text-emeraldLux transition-colors">Mempool Stream</a></li>
+                        <li><a href="/audit" class="hover:text-emeraldLux transition-colors">Security Enclave</a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-white font-bold uppercase tracking-wider text-[11px]">Ecosystem</h3>
+                    <ul class="space-y-2 text-[11px]">
+                        <li><a href="/docs" class="hover:text-emeraldLux transition-colors">Documentation</a></li>
+                        <li><a href="/sdk" class="hover:text-emeraldLux transition-colors">Terminal SDK</a></li>
+                        <li><a href="/docs" class="hover:text-emeraldLux transition-colors">Knowledge Base</a></li>
+                        <li><a href="/audit" class="hover:text-emeraldLux transition-colors">Bug Bounty</a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-white font-bold uppercase tracking-wider text-[11px]">Legal & Trust</h3>
+                    <ul class="space-y-2 text-[11px]">
+                        <li><a href="/terms" class="hover:text-emeraldLux transition-colors">Terms of Service</a></li>
+                        <li><a href="/privacy" class="hover:text-emeraldLux transition-colors">Privacy Policy</a></li>
+                        <li><a href="/audit" class="hover:text-emeraldLux transition-colors">Autonomous Audit</a></li>
+                        <li><a href="#" class="hover:text-emeraldLux transition-colors">Priority Support</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 text-[11px] font-mono text-slate-500">
+                <div>Krypton Apex © 2026 — All Rights Reserved.</div>
+                <div class="flex items-center gap-2">
+                    <span>Donations Vault:</span>
+                    <span class="text-emeraldLux font-bold hover:underline cursor-pointer">C27Dgi...L5EuLK ❤</span>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

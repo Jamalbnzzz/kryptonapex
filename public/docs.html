@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation — KRYPTON APEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: '#05070B',
+                        panel: '#0B0F19',
+                        borderSubtle: '#1E293B',
+                        emeraldLux: '#10B981',
+                        cyanLux: '#06B6D4',
+                        goldLux: '#F59E0B',
+                        crimsonLux: '#F43F5E'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-slate-100 min-h-screen font-sans antialiased flex flex-col selection:bg-emeraldLux selection:text-black">
+
+    <!-- Top Institutional Telemetry Ribbon -->
+    <div class="w-full bg-[#030508] border-b border-white/[0.06] px-5 py-1.5 flex items-center justify-between text-[11px] font-mono text-slate-400">
+        <div class="flex items-center gap-5">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emeraldLux animate-ping"></span>
+                <span class="text-slate-300 font-semibold">HELIUS ULTRA-RPC</span>
+                <span class="text-emeraldLux font-bold px-1.5 py-0.5 bg-emerald-500/10 rounded">12ms</span>
+            </div>
+            <div class="hidden sm:flex items-center gap-2 border-l border-white/[0.08] pl-5">
+                <span class="text-slate-500">JITO BLOCK ENGINE:</span>
+                <span class="text-cyanLux font-semibold">FRANKFURT-MAINNET</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="/" class="text-slate-400 hover:text-white transition-colors">← Back to Terminal</a>
+        </div>
+    </div>
+
+    <!-- Main Clean Header Bar -->
+    <header class="w-full max-w-5xl mx-auto px-6 py-6 flex items-center justify-between border-b border-white/[0.06]">
+        <div class="flex items-center gap-3.5">
+            <svg class="w-9 h-9 drop-shadow-[0_0_12px_rgba(16,185,129,0.45)] shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="nxSubEm" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#6EE7B7"/>
+                        <stop offset="50%" stop-color="#10B981"/>
+                        <stop offset="100%" stop-color="#047857"/>
+                    </linearGradient>
+                    <linearGradient id="nxSubCy" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#67E8F9"/>
+                        <stop offset="50%" stop-color="#06B6D4"/>
+                        <stop offset="100%" stop-color="#0369A1"/>
+                    </linearGradient>
+                </defs>
+                <path d="M50 8 L30 50 L50 92 Z" fill="url(#nxSubEm)"/>
+                <path d="M50 8 L70 50 L50 92 Z" fill="url(#nxSubCy)"/>
+                <path d="M10 62 C20 78 80 58 90 36 C82 22 68 24 68 24 C78 30 74 46 46 56 C22 64 14 54 22 44 C12 48 6 56 10 62 Z" fill="#ECFDF5"/>
+            </svg>
+            <div>
+                <h1 class="text-base font-extrabold tracking-tight text-white">KRYPTON <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">APEX</span></h1>
+            </div>
+        </div>
+        <a href="/" class="text-xs font-mono text-emeraldLux hover:underline">← Back to Terminal</a>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-[1000px] mx-auto p-6 md:p-10 flex-1 space-y-8">
+        
+        <div class="panel bg-panel border border-borderSubtle rounded-2xl p-6 md:p-8 shadow-xl space-y-6">
+            <div class="border-b border-white/[0.06] pb-4">
+                <span class="text-[10px] font-mono text-emeraldLux uppercase tracking-widest font-bold">Krypton Core v5.0</span>
+                <h2 class="text-2xl font-extrabold text-white mt-1">Terminal Documentation</h2>
+                <p class="text-xs text-slate-400 mt-1">Comprehensive institutional guide for low-latency execution and autonomous vault management on Solana.</p>
+            </div>
+
+            <div class="space-y-6 text-sm text-slate-300 leading-relaxed">
+                <div>
+                    <h3 class="text-white font-bold text-base mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emeraldLux"></span> 1. System Architecture & Setup
+                    </h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Krypton Apex operates as an isolated institutional execution terminal leveraging direct Helius RPC nodes and Jito block bundle relay systems to achieve ultra-low latency routing and automated transaction dispatch.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold text-base mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-cyanLux"></span> 2. Execution Modes
+                    </h3>
+                    <ul class="list-disc list-inside space-y-1.5 text-xs text-slate-400">
+                        <li><strong class="text-white">AI Liquidity Sniper:</strong> Automatically detects and executes entries on early-stage pool formations.</li>
+                        <li><strong class="text-white">Zero-Block Copy Trader:</strong> Mirrors target smart-money transactions within the identical block interval.</li>
+                        <li><strong class="text-white">Whale Accumulation Radar:</strong> Monitors high-volume capital inflows and fresh funder activities.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold text-base mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-goldLux"></span> 3. Security & MEV Protection
+                    </h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        All transactions are safeguarded through dedicated private Jito block bundles to eliminate sandwich attacks, front-running risks, and public mempool exposure.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Professional Footer -->
+    <footer class="w-full bg-[#030508] border-t border-white/[0.08] text-slate-400 font-sans mt-auto py-8 px-6">
+        <div class="max-w-[1680px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono">
+            <div>Krypton Apex © 2026 — All Rights Reserved.</div>
+            <a href="/" class="text-emeraldLux font-bold hover:underline">Return to Main Terminal →</a>
+        </div>
+    </footer>
+
+</body>
+</html>
