@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -31,9 +29,12 @@ jobs:
         run: python auto_blog.py
 
       - name: Commit and Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name 'AI Blog Bot'
           git config --global user.email 'bot@kryptonapex.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git add public/blogs.json
           git commit -m "Auto-generated AI SEO Blogs [skip ci]" || echo "No changes to commit"
-          git push
+          git push origin HEAD:main
