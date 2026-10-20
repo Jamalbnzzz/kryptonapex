@@ -17,7 +17,6 @@ topics = [
 
 def generate_blog():
     topic = topics[int(time.time()) % len(topics)]
-    date_str = datetime.now().strftime("%Y-%m-%d-%H-%M")
     
     img_prompt = topic.replace(" ", "%20") + "%20cyberpunk%20solana%20trading"
     img_url = f"https://image.pollinations.ai/prompt/{img_prompt}?width=800&height=400&nologo=true"
@@ -43,9 +42,9 @@ def generate_blog():
         
         html_content = re.sub(r'^```html|```$', '', html_content, flags=re.MULTILINE).strip()
         
-        # حفظ المقال مباشرة داخل مجلد public لتفادي مشكل المسارات
+        # حفظ المقال في ملف ثابت واحد داخل public/
         os.makedirs("public", exist_ok=True)
-        filename = f"public/blog-{date_str}.html"
+        filename = "public/article.html"
         
         with open(filename, "w", encoding="utf-8") as f:
             f.write(html_content)
@@ -54,6 +53,4 @@ def generate_blog():
     except Exception as e:
         print("Error generating content:", e)
 
-for _ in range(2):
-    generate_blog()
-    time.sleep(5)
+generate_blog()
