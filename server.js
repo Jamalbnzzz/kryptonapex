@@ -55,6 +55,10 @@ function log(text, level = 'info') {
 }
 
 // Routes for Footer Pages (Clean & Organized)
+// Route for AI Blogs page
+app.get('/blogs', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'blogs.html'));
+});
 app.get('/terms', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'terms.html'));
 });
