@@ -4,23 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Krypton Apex - AI Crypto Blogs & SEO Guides</title>
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <style>
+        body { background-color: #05070B; color: #e2e8f0; font-family: monospace, sans-serif; padding: 20px; margin: 0; }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { border-bottom: 1px solid #1e293b; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { font-size: 24px; color: #ffffff; margin: 0; }
+        h1 span { color: #34d399; font-size: 14px; }
+        a { color: #34d399; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .date { font-size: 12px; color: #34d399; margin-bottom: 8px; display: block; }
+        .title { font-size: 20px; font-weight: bold; color: #ffffff; margin-bottom: 12px; }
+        .content img { width: 100%; border-radius: 8px; margin: 15px 0; }
+        .content p { color: #cbd5e1; line-height: 1.6; font-size: 14px; }
+        footer { text-align: center; border-top: 1px solid #1e293b; padding-top: 20px; margin-top: 40px; font-size: 12px; color: #64748b; }
+    </style>
 </head>
-<body class="bg-[#05070B] text-slate-200 min-h-screen font-sans p-6">
-    <div class="max-w-4xl mx-auto">
-        <header class="py-8 border-b border-slate-800 mb-8 flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-wider text-white">KRYPTON APEX <span class="text-emerald-400 text-sm">BLOGS</span></h1>
-            <a href="/" class="text-sm text-slate-400 hover:text-emerald-400 transition-colors">← Back to Terminal</a>
+<body>
+    <div class="container">
+        <header>
+            <h1>KRYPTON APEX <span>BLOGS</span></h1>
+            <a href="/">← Back to Terminal</a>
         </header>
         
         <main>
-            <h2 class="text-xl font-semibold mb-6 text-white">Latest AI-Generated SEO Insights</h2>
-            <div id="blog-container" class="space-y-6">
-                <p class="text-emerald-400 text-sm animate-pulse">Loading articles...</p>
+            <h2 style="font-size: 18px; margin-bottom: 20px; color: #ffffff;">Latest AI-Generated SEO Insights</h2>
+            <div id="blog-container">
+                <p style="color: #34d399;">Loading articles from autonomous engine...</p>
             </div>
         </main>
         
-        <footer class="mt-16 py-6 border-t border-slate-800 text-center text-xs text-slate-500">
+        <footer>
             Krypton Apex © 2026 — All Rights Reserved.
         </footer>
     </div>
@@ -31,23 +45,23 @@
             .then(blogs => {
                 const container = document.getElementById('blog-container');
                 container.innerHTML = '';
-                if(blogs.length === 0) {
-                    container.innerHTML = '<p class="text-slate-400">No articles yet.</p>';
+                if(!blogs || blogs.length === 0) {
+                    container.innerHTML = '<p style="color: #94a3b8;">No articles generated yet. Run the workflow in GitHub Actions.</p>';
                     return;
                 }
                 blogs.forEach(blog => {
                     const card = document.createElement('div');
-                    card.className = "bg-slate-900/50 border border-slate-800 rounded-2xl p-6 shadow-xl";
+                    card.className = "card";
                     card.innerHTML = `
-                        <span class="text-xs text-emerald-400 font-mono">${blog.date}</span>
-                        <h3 class="text-xl font-bold text-white mt-2 mb-4">${blog.title}</h3>
-                        <div class="text-slate-300 space-y-4 text-sm">${blog.content}</div>
+                        <span class="date">${blog.date}</span>
+                        <div class="title">${blog.title}</div>
+                        <div class="content">${blog.content}</div>
                     `;
                     container.appendChild(card);
                 });
             })
             .catch(err => {
-                document.getElementById('blog-container').innerHTML = '<p class="text-slate-400">Articles will appear here shortly.</p>';
+                document.getElementById('blog-container').innerHTML = '<p style="color: #94a3b8;">Articles will appear here once the bot finishes the first run.</p>';
             });
     </script>
 </body>
