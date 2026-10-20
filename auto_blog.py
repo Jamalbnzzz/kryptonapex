@@ -1,7 +1,7 @@
 import os
 import requests
 import time
-import re
+import json
 from datetime import datetime
 
 API_KEY = os.environ.get("GEMINI_API_KEY")
@@ -17,6 +17,7 @@ topics = [
 
 def generate_blog():
     topic = topics[int(time.time()) % len(topics)]
+    date_str = datetime.now().strftime("%Y-%m-%d %H:%M")
     
     img_prompt = topic.replace(" ", "%20") + "%20cyberpunk%20solana%20trading"
     img_url = f"https://image.pollinations.ai/prompt/{img_prompt}?width=800&height=400&nologo=true"
@@ -24,11 +25,11 @@ def generate_blog():
     print(f"Generating blog for: {topic}")
     
     prompt = f"""
-    Write a professional SEO-optimized blog post in HTML about '{topic}' for kryptonapex.com.
-    Include a <head> tag with SEO meta title, description, and keywords.
-    Use Tailwind CSS classes for styling (dark mode: bg-[#05070B] text-slate-200).
-    Include this image URL seamlessly in the HTML: <img src="{img_url}" alt="{topic}" class="w-full rounded-xl shadow-lg my-6">
-    Make the article 800 words, highly informative for crypto traders.
+    Write a professional SEO-optimized article body about '{topic}' for kryptonapex.com using clean HTML tags (like <h2>, <p>, <ul>, <li>).
+    Use Tailwind CSS classes for styling (dark mode text-slate-300).
+    Include this image URL: <img src="{img_url}" alt="{topic}" class="w-full rounded-xl shadow-lg my-6">
+    Make the article 600 words, highly informative for crypto traders.
+    Do NOT include <html>, <head>, or <body> tags. Output only the inner HTML content.
     Do NOT wrap the output in markdown code blocks like ```html. Output raw HTML only.
     """
     
@@ -39,16 +40,32 @@ def generate_blog():
         response = requests.post(URL, headers=headers, json=payload)
         result = response.json()
         html_content = result['candidates'][0]['content']['parts'][0]['text']
+        html_content = html_content.replace("```html", "").replace("```", "").strip()
         
-        html_content = re.sub(r'^```html|```$', '', html_content, flags=re.MULTILINE).strip()
-        
-        # حفظ المقال في ملف ثابت واحد داخل public/
         os.makedirs("public", exist_ok=True)
-        filename = "public/article.html"
+        json_path = "public/blogs.json"
         
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(html_content)
-        print(f"Success! Blog saved to {filename}")
+        blogs = []
+        if os.path.exists(json_path):
+            with open(json_path, "r", encoding="utf-8") as f:
+                try:
+                    blogs = json.load(f)
+                except:
+                    blogs = []
+                    
+        new_blog = {
+            "title": topic,
+            "date": date_str,
+            "content": html_content
+        }
+        
+        blogs.insert(0, new_blog)
+        blogs = blogs[:10] # نحتفظوا بأخر 10 مقالات
+        
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(blogs, f, ensure_ascii=False, indent=4)
+            
+        print("Blog successfully added to blogs.json")
         
     except Exception as e:
         print("Error generating content:", e)
