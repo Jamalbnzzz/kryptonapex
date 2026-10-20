@@ -31,6 +31,6 @@ jobs:
         run: |
           git config --global user.name 'AI Blog Bot'
           git config --global user.email 'bot@kryptonapex.com'
-          git add blogs/
-          git commit -m "Auto-generated AI SEO Blogs [skip ci] if possible" || exit 0
+          git add .
+          git commit -m "Auto-generated AI SEO Blogs [skip ci]" || exit 0
           git push
