@@ -28,13 +28,10 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python auto_blog.py
 
-      - name: Commit and Push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name 'AI Blog Bot'
-          git config --global user.email 'bot@kryptonapex.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add public/blogs.json
-          git commit -m "Auto-generated AI SEO Blogs [skip ci]" || echo "No changes to commit"
-          git push origin HEAD:main
+      - name: Push to Repository
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-generated AI SEO Blogs [skip ci]"
+          file_pattern: "public/blogs.json"
+          commit_user_name: "AI Blog Bot"
+          commit_user_email: "bot@kryptonapex.com"
