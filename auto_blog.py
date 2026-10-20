@@ -43,8 +43,9 @@ def generate_blog():
         
         html_content = re.sub(r'^```html|```$', '', html_content, flags=re.MULTILINE).strip()
         
-        os.makedirs("public/blogs", exist_ok=True)
-        filename = f"public/blogs/blog-{date_str}.html"
+        # حفظ المقال مباشرة داخل مجلد public لتفادي مشكل المسارات
+        os.makedirs("public", exist_ok=True)
+        filename = f"public/blog-{date_str}.html"
         
         with open(filename, "w", encoding="utf-8") as f:
             f.write(html_content)
