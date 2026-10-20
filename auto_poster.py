@@ -29,13 +29,13 @@ def generate_tweet():
     try:
         response = requests.post(GEMINI_URL, headers=headers, json=payload)
         result = response.json()
-        print("Gemini API Response:", result) # طباعة الرد الكامل لمعرفة المشكل إن وجد
+        print("Gemini API Full Response:", result)
         
         if 'candidates' in result and len(result['candidates']) > 0:
             tweet_text = result['candidates'][0]['content']['parts'][0]['text'].strip()
             return tweet_text
         else:
-            print("Error: 'candidates' not found in Gemini response.")
+            print("Error: 'candidates' not found in Gemini response. Response was:", result)
             return None
     except Exception as e:
         print("Exception generating tweet content:", e)
