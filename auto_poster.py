@@ -41,6 +41,9 @@ def post_to_twitter(text):
     payload = {"text": text}
     
     response = requests.post(url, json=payload, auth=auth)
+    print(f"Status Code: {response.status_code}")
+    print(f"Response Body: {response.text}")
+    
     if response.status_code == 201:
         print("Tweet posted successfully!")
     else:
