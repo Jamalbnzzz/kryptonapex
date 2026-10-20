@@ -1,0 +1,36 @@
+name: AI Auto Blogger
+
+on:
+  schedule:
+    # كيخدم أوتوماتيكيا كل نهار مع 8 دالصباح بتوقيت غرينيتش
+    - cron: '0 8 * * *'
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Install Dependencies
+        run: pip install requests
+        
+      - name: Run AI Blog Generator
+        env:
+          # هنا كيجبد الساروت اللي غنخبّيوه فـ Secrets
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python auto_blog.py
+        
+      - name: Commit and Push
+        run: |
+          git config --global user.name 'AI Blog Bot'
+          git config --global user.email 'bot@kryptonapex.com'
+          git add blogs/
+          git commit -m "Auto-generated AI SEO Blogs [skip ci] if possible" || exit 0
+          git push
