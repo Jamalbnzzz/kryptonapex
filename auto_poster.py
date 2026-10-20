@@ -29,10 +29,16 @@ def generate_tweet():
     try:
         response = requests.post(GEMINI_URL, headers=headers, json=payload)
         result = response.json()
-        tweet_text = result['candidates'][0]['content']['parts'][0]['text'].strip()
-        return tweet_text
+        print("Gemini API Response:", result) # طباعة الرد الكامل لمعرفة المشكل إن وجد
+        
+        if 'candidates' in result and len(result['candidates']) > 0:
+            tweet_text = result['candidates'][0]['content']['parts'][0]['text'].strip()
+            return tweet_text
+        else:
+            print("Error: 'candidates' not found in Gemini response.")
+            return None
     except Exception as e:
-        print("Error generating tweet content:", e)
+        print("Exception generating tweet content:", e)
         return None
 
 def post_to_twitter(text):
@@ -41,8 +47,8 @@ def post_to_twitter(text):
     payload = {"text": text}
     
     response = requests.post(url, json=payload, auth=auth)
-    print(f"Status Code: {response.status_code}")
-    print(f"Response Body: {response.text}")
+    print(f"Twitter Status Code: {response.status_code}")
+    print(f"Twitter Response Body: {response.text}")
     
     if response.status_code == 201:
         print("Tweet posted successfully!")
@@ -54,3 +60,5 @@ if __name__ == "__main__":
     if tweet:
         print(f"Generated Tweet: {tweet}")
         post_to_twitter(tweet)
+    else:
+        print("Skipping posting due to generation failure.")
